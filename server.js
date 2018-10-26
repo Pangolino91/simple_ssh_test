@@ -3,6 +3,8 @@ const hbs = require('hbs');
 const fs = require('fs');
 
 
+// this is to make the app work even with Heroku! 
+const port = process.env.PORT || 3000;
 var app = express();
 
 
@@ -10,6 +12,10 @@ hbs.registerPartials(__dirname + '/views/partials')
 
 app.set('view motore', 'hbs');
 
+// app.use((req, res, next) => {
+//     res.render('./maintenance.hbs');
+//     next()
+// })
 
 app.use((req, res, next) => {
     var now = new Date().getMilliseconds();
@@ -17,12 +23,6 @@ app.use((req, res, next) => {
     fs.appendFileSync('server.log', log + '\n')
     next()
 })
-
-app.use((req, res, next) => {
-    res.render('./maintenance.hbs');
-    next()
-})
-
 
 app.use(express.static(__dirname + '/public'));
 
@@ -56,6 +56,6 @@ app.get('/bad', (request, response) => {
     })
 })
 
-app.listen(3000, () => {
-    console.log('Server is muthafucking app & running')
+app.listen(port, () => {
+    console.log(`Server is muthafucking app & running on ${port}`)
 });
